@@ -15,8 +15,8 @@ type Product (code:string, price:float) =
 
 [<EntryPoint>]
 let main argv =
-    let fd1 = new FunctionalDependency.T(set ["x"; "z"], set ["y"])
-    let fd2 = new FunctionalDependency.T(set ["x"; "z"; "a"], set ["y"])
+    let fd1 = FunctionalDependency.T(set ["x"; "z"], set ["y"])
+    let fd2 = FunctionalDependency.T(set ["x"; "z"; "a"], set ["y"])
     let equal = FunctionalDependency.AreEqual fd1 fd2
     printfn "Equal? %b" equal
     0

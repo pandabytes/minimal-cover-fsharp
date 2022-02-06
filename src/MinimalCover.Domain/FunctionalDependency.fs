@@ -5,8 +5,8 @@ open System
 module FunctionalDependency = 
   let private ValidateLeftAndRight (left: Set<string>) (right: Set<string>) = 
     if (left.Count > 0 && right.Count > 0) then
-      let hasEmptyLeftAttrbs = Set.exists (fun a -> String.IsNullOrWhiteSpace a) left
-      let hasEmptyRightAttrbs = Set.exists (fun a -> String.IsNullOrWhiteSpace a) right
+      let hasEmptyLeftAttrbs = Set.exists (String.IsNullOrWhiteSpace) left
+      let hasEmptyRightAttrbs = Set.exists (String.IsNullOrWhiteSpace) right
       if (hasEmptyLeftAttrbs || hasEmptyRightAttrbs) then
         raise (ArgumentException "Both left and right must have non-null and non-empty attributes.")
     else
