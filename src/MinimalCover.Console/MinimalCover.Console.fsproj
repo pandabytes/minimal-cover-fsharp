@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MinimalCover.Domain\MinimalCover.Domain.fsproj" />
+    <ProjectReference Include="..\MinimalCover.Infrastructure\MinimalCover.Infrastructure.fsproj" />
   </ItemGroup>
 
 </Project>

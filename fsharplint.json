@@ -1,14 +1,14 @@
 {
     "ignoreFiles": [
-        "assemblyinfo.*"
+        "*assemblyinfo.*"
     ],
     "global": {
         "numIndentationSpaces": 2
     },
     "typedItemSpacing": {
-        "enabled": false,
+        "enabled": true,
         "config": {
-            "typedItemStyle": "NoSpaces"
+            "typedItemStyle": "SpaceAfter"
         }
     },
     "typePrefixing": { "enabled": false },
@@ -276,13 +276,13 @@
         "enabled": false
     },
     "maxCharactersOnLine": {
-        "enabled": false,
+        "enabled": true,
         "config": {
             "maxCharactersOnLine": 120
         }
     },
     "trailingWhitespaceOnLine": {
-        "enabled": false,
+        "enabled": true,
         "config": {
             "numberOfSpacesAllowed": 1,
             "oneSpaceAllowedAfterOperator": true,

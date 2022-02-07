@@ -12,15 +12,6 @@ module FunctionalDependency =
     else
       raise (ArgumentException "Both left and right must have at least 1 attribute.")
 
-  //type T = class
-  //  val Left: Set<string>
-  //  val Right: Set<string>
-
-  //  new(left, right) = 
-  //    ValidateLeftAndRight left right
-  //    { Left = left; Right = right; }    
-  //end
-
   type T(left: Set<string>, right: Set<string>) = 
     do ValidateLeftAndRight left right
     member this.Left = left
