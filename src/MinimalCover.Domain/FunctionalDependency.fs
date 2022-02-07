@@ -12,16 +12,30 @@ module FunctionalDependency =
     else
       raise (ArgumentException "Both left and right must have at least 1 attribute.")
 
+  [<StructuredFormatDisplay("Left: {Left}; Right: {Right}")>]
   type T(left: Set<string>, right: Set<string>) = 
     do ValidateLeftAndRight left right
     member this.Left = left
     member this.Right = right
 
-  /// Check if 2 functional dependencies are equal.
-  let AreEqual (fd1: T) (fd2: T) =
-    if (LanguagePrimitives.PhysicalEquality fd1 fd2) then
-      true
-    else
-      fd1.Left.Equals(fd2.Left) && fd1.Right.Equals(fd2.Right)
+    interface IComparable with
+      // < 1 -> before
+      // = 0 -> same
+      // > 1 -> after
+      member this.CompareTo (obj: obj) =
+        match obj with
+          | :? T as otherFd ->
+              compare (Set.union this.Left this.Right) (Set.union otherFd.Left otherFd.Right)
+          | _ -> -1
 
-  
+    override this.Equals (obj: obj) =
+      match obj with
+        | :? T as otherFd ->
+          (LanguagePrimitives.PhysicalEquality this otherFd) ||
+          (this.Left.Equals(otherFd.Left) && this.Right.Equals(otherFd.Right))
+        | _ -> false
+
+    override this.GetHashCode() =
+      let startingHashCode = 1430287
+      let hashCode = Set.fold (fun prev current -> prev * current.GetHashCode()) startingHashCode this.Left
+      (Set.fold (fun prev current -> prev * current.GetHashCode()) hashCode this.Right) * 17

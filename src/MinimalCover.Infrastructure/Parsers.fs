@@ -41,7 +41,4 @@ module Text =
                 FunctionalDependency.T (leftAttributes, rightAttributes))
 
                 fdStrings
-
-    // Need to convert fds to set
-    //fds |> set
-    fds
+    fds |> set
