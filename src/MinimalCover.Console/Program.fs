@@ -11,8 +11,11 @@ let main argv =
 
     let parserOptions: Parsers.Text.ParserOptions = 
       { AttributeSeparator = ","; FdSeparator = ";"; LeftRightSeparator = "-->" }
-   
-    let fds = Parsers.Text.Parse parserOptions "a,b,c --> x,y; x,y --> a"
-    printfn "%A" (fds.Add (FunctionalDependency.T(set ["x"; "y"], set ["ab"])))
+    
+    try
+      let fds = Parsers.Text.Parse parserOptions "a,b,c --> x,y; x,y --> a"
+      printfn "%A" (fds.Add (FunctionalDependency.T(set ["x"; "y"], set ["ab"])))
+    with 
+      | :? Exceptions.ParserException as ex -> printf "%A" ex.InnerException
 
     0

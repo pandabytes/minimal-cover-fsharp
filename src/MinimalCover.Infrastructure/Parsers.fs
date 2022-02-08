@@ -3,8 +3,6 @@
 open System
 open MinimalCover.Domain
 
-exception ParserException of string * (Exception option)
-
 module Text =
   type ParserOptions = { AttributeSeparator: string; FdSeparator: string; LeftRightSeparator: string }
 
@@ -28,13 +26,13 @@ module Text =
                 let fdTokens = fd.Split (parserOptions.LeftRightSeparator)
                 if (fdTokens.Length <> 2) then
                   let message = $"LHS and RHS must be separated by \"{parserOptions.LeftRightSeparator}\"."
-                  raise (ParserException (message, None))
+                  raise (Exceptions.ParserException message)
 
                 let leftAttributeStr = fdTokens.[0];
                 let rightAttributeStr = fdTokens.[1];
                 if ( (String.IsNullOrWhiteSpace leftAttributeStr) || (String.IsNullOrWhiteSpace rightAttributeStr)) then
                   let message = $"LHS and RHS must not be empty. Invalid functional dependency \"{fd}\"."
-                  raise (ParserException (message, None))
+                  raise (Exceptions.ParserException message)
 
                 let leftAttributes = GetAtributesWithSeparator leftAttributeStr |> set
                 let rightAttributes = GetAtributesWithSeparator rightAttributeStr |> set

@@ -9,6 +9,8 @@ Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "MinimalCover.Infrastructure
 EndProject
 Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "MinimalCover.Domain", "src\MinimalCover.Domain\MinimalCover.Domain.fsproj", "{EDC5A805-6CC5-4F28-899F-745B1C67BE1A}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{FC9BA89A-307C-4C86-AF93-7B031A647924}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,6 +32,11 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{717D2F60-8564-4953-8C7D-53783EBA82C5} = {FC9BA89A-307C-4C86-AF93-7B031A647924}
+		{F9C6C38F-2B44-4447-ADB1-9C4791E6F3EB} = {FC9BA89A-307C-4C86-AF93-7B031A647924}
+		{EDC5A805-6CC5-4F28-899F-745B1C67BE1A} = {FC9BA89A-307C-4C86-AF93-7B031A647924}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {665CDEB4-EFF5-4FDE-97DD-1B08D6646B33}
