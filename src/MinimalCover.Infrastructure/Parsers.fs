@@ -1,7 +1,13 @@
 ﻿namespace MinimalCover.Infrastructure.Parsers
 
 open System
+open System.Collections.Generic
 open MinimalCover.Domain
+open Newtonsoft.Json
+open Newtonsoft.Json.Linq
+open Newtonsoft.Json.Schema
+
+open FSharp.Data
 
 module Text =
   type ParserOptions = { AttributeSeparator: string; FdSeparator: string; LeftRightSeparator: string }
@@ -40,3 +46,34 @@ module Text =
 
                 fdStrings
     fds |> set
+
+module Json =
+  type ParserSettings = { SchemaFilePath: string option }
+
+  let private ValidateJson (schema: string) (jsonStr: string) =
+    let schema = JSchema.Parse(schema);
+    let jToken =
+      try
+        JToken.Parse(jsonStr)
+      with
+        | :? JsonReaderException as ex -> 
+          let message = $"Fail to parse the given JSON string \"{jsonStr}\". " + 
+                        "This string may not be in the correct JSON format."
+          raise (Exceptions.ParserException (message, ex))
+
+    let mutable validationErrors: IList<ValidationError> = upcast List<ValidationError>();
+    jToken.IsValid (schema, &validationErrors) |> ignore
+
+    if (validationErrors.Count > 0) then
+      let errorMessage =
+        Seq.fold
+          (fun (prev: string) (current: ValidationError) ->
+            $"{prev}{Environment.NewLine}{current.Message} "
+            + $"Path: {current.Path}. "
+            + $"Line number: {current.LineNumber}.")
+          "Fail to validate JSON string."
+          validationErrors
+
+      raise (Exceptions.ParserException errorMessage)
+
+    jToken

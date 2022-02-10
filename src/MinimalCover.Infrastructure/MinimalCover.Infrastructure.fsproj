@@ -7,7 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Include="json-fd-schema.json" />
     <Compile Include="Parsers.fs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FSharp.Data" Version="4.2.7" />
+    <PackageReference Include="Newtonsoft.Json.Schema" Version="3.0.14" />
   </ItemGroup>
 
   <ItemGroup>
