@@ -1,12 +1,7 @@
 ﻿namespace MinimalCover.Infrastructure.Parsers
 
 open System
-open System.Collections.Generic
 open MinimalCover.Domain
-open Newtonsoft.Json
-open Newtonsoft.Json.Linq
-open Newtonsoft.Json.Schema
-
 open FSharp.Data
 
 module Text =
@@ -48,32 +43,21 @@ module Text =
     fds |> set
 
 module Json =
-  type ParserSettings = { SchemaFilePath: string option }
+  type private FunctionalDependencyJson = JsonProvider<""" [ { "left": ["a"], "right": ["b"] } ] """>
 
-  let private ValidateJson (schema: string) (jsonStr: string) =
-    let schema = JSchema.Parse(schema);
-    let jToken =
-      try
-        JToken.Parse(jsonStr)
-      with
-        | :? JsonReaderException as ex -> 
-          let message = $"Fail to parse the given JSON string \"{jsonStr}\". " + 
-                        "This string may not be in the correct JSON format."
-          raise (Exceptions.ParserException (message, ex))
+  let Parse (jsonStr: string) = 
+    let parsedJson = FunctionalDependencyJson.Parse jsonStr
 
-    let mutable validationErrors: IList<ValidationError> = upcast List<ValidationError>();
-    jToken.IsValid (schema, &validationErrors) |> ignore
+    parsedJson
+    |> Array.map
+         (fun fdJson ->
+           try
+             FunctionalDependency.T(set fdJson.Left, set fdJson.Right)
+           with
+           | :? ArgumentException as ex ->
+             let message =
+               $"Failed to parse JSON \"{fdJson.JsonValue.ToString()}\". {ex.Message}"
 
-    if (validationErrors.Count > 0) then
-      let errorMessage =
-        Seq.fold
-          (fun (prev: string) (current: ValidationError) ->
-            $"{prev}{Environment.NewLine}{current.Message} "
-            + $"Path: {current.Path}. "
-            + $"Line number: {current.LineNumber}.")
-          "Fail to validate JSON string."
-          validationErrors
-
-      raise (Exceptions.ParserException errorMessage)
-
-    jToken
+             raise (Exceptions.ParserException(message, ex))
+           | _ -> reraise ())
+    |> set
